@@ -14,8 +14,7 @@ class Times extends BinaryOp {
 	}
 
 	@Override
-	public int evalToInt() {
-		// TODO Auto-generated method stub
+	public int evalToInt() throws NotAnInteger {
 		return left.evalToInt() * right.evalToInt();
 	}
 

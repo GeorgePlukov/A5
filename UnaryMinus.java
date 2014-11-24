@@ -14,8 +14,7 @@ class UnaryMinus extends Expr {
 	}
 
 	@Override
-	public int evalToInt() {
-		// TODO Auto-generated method stub
+	public int evalToInt() throws NotAnInteger {
 		return -1 * e.evalToInt();
 	}
 

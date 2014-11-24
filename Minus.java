@@ -16,8 +16,8 @@ class Minus extends Expr { // NOT BinaryOp!
 	}
 
 	@Override
-	public int evalToInt() {
-		return left.evalToInt() * right.evalToInt();
+	public int evalToInt() throws NotAnInteger {
+		return left.evalToInt() - right.evalToInt();
 	}
 
 	@Override
