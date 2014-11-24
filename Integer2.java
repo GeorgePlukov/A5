@@ -15,14 +15,12 @@ class Integer2 extends Expr {
 
 	@Override
 	public int evalToInt() {
-		// TODO Auto-generated method stub
-		return 0;
+		return i;
 	}
 
 	@Override
 	public double evalToFloat() {
-		// TODO Auto-generated method stub
-		return 0;
+		return i;
 	}
 
 }

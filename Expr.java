@@ -16,6 +16,7 @@ abstract class Expr {
       Expr e5 = p.parse();
       System.out.println(e5.getClass() +"  "+ e5.isGround());
       print(e5);
+     System.out.println(e5.evalToInt());
     } catch (ParseError e) {
       System.out.println(e);
     }

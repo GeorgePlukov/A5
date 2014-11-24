@@ -16,7 +16,7 @@ class Plus extends BinaryOp {
 	@Override
 	public int evalToInt() {
 		// TODO Auto-generated method stub
-		return 0;
+		return left.evalToInt() + right.evalToInt();
 	}
 
 	@Override
