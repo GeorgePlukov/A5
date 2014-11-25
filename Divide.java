@@ -17,14 +17,15 @@ class Divide extends Expr { // NOT BinaryOp!
 
 	@Override
 	public int evalToInt() throws NotAnInteger {
-		if(!(left.evalToInt() != (int)(left.evalToInt())))
+		int a = left.evalToInt() / right.evalToInt();
+		double b = left.evalToFloat() / right.evalToFloat();
+		if(!(b == (int)b))
 			throw new NotAnInteger(left + " divided by " + right + " is not an integer");
-		return left.evalToInt() / right.evalToInt();
+		return a;
 	}
 
 	@Override
 	public double evalToFloat() {
-		// TODO Auto-generated method stub
-		return 0;
+		return left.evalToFloat() / right.evalToFloat();
 	}
 }

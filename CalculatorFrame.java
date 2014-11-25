@@ -11,8 +11,8 @@
  * contains all of the classes for creating
  * user interfaces and for painting graphics and images.
  */
-import java.awt.GridLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -20,8 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
-
+import javax.swing.JButton;
 /*
  * We're going to be using the Swing package.
  * It provides a set of "lightweight" (all-Java language) components that
@@ -35,14 +34,15 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JButton;
 
 
 /* We're making this class CalculatorFrame extend
  * JFrame, which means it in and of itself IS A JFrame.
  */
 class CalculatorFrame extends JFrame {
-
+	public static void main (String [] args){
+		new CalculatorFrame();
+	}
 	private static final int NUMBER_PAD_WIDTH = 4;
 	private static final int NUMBER_PAD_HEIGHT = 5;
 	

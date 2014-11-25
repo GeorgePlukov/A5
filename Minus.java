@@ -23,6 +23,6 @@ class Minus extends Expr { // NOT BinaryOp!
 	@Override
 	public double evalToFloat() {
 		// TODO Auto-generated method stub
-		return 0;
+		return left.evalToFloat() - right.evalToFloat();
 	}
 }
