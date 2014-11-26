@@ -1,3 +1,4 @@
+package cs2s03;
 class Minus extends Expr { // NOT BinaryOp!
 	Expr left;
 	Expr right;
@@ -23,6 +24,6 @@ class Minus extends Expr { // NOT BinaryOp!
 	@Override
 	public double evalToFloat() {
 		// TODO Auto-generated method stub
-		return left.evalToFloat() - right.evalToFloat();
+		return 0;
 	}
 }

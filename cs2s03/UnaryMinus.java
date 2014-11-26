@@ -1,3 +1,4 @@
+package cs2s03;
 class UnaryMinus extends Expr {
 	Expr e;
 
@@ -20,6 +21,7 @@ class UnaryMinus extends Expr {
 
 	@Override
 	public double evalToFloat() {
-		return -1*e.evalToFloat();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

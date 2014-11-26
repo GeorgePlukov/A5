@@ -1,3 +1,4 @@
+package cs2s03;
 class Plus extends BinaryOp {
 	Plus(Expr x, Expr y) {
 		left = x;
@@ -21,6 +22,7 @@ class Plus extends BinaryOp {
 
 	@Override
 	public double evalToFloat() {
-		return left.evalToFloat() + right.evalToFloat();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

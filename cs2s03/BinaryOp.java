@@ -1,3 +1,4 @@
+package cs2s03;
 abstract class BinaryOp extends Expr {
 	Expr left;
 	Expr right;

@@ -1,3 +1,4 @@
+package cs2s03;
 abstract class Expr {
 	abstract public String toString();
 
@@ -15,8 +16,8 @@ abstract class Expr {
 		return (e.isGround()) ? e.toString() : "( " + e.toString() + " )";
 	}
 
-	public static void main(String[] args) throws NotAnInteger {		
-		String s1 = "8/12";
+	public static void main(String[] args) throws NotAnInteger {
+		String s1 = "8+3";
 		Parser p = new Parser(s1);
 		try {
 			Expr e5 = p.parse();

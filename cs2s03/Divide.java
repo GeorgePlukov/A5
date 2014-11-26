@@ -1,3 +1,4 @@
+package cs2s03;
 class Divide extends Expr { // NOT BinaryOp!
 	Expr left;
 	Expr right;
@@ -17,15 +18,15 @@ class Divide extends Expr { // NOT BinaryOp!
 
 	@Override
 	public int evalToInt() throws NotAnInteger {
-		int a = left.evalToInt() / right.evalToInt();
-		double b = left.evalToFloat() / right.evalToFloat();
-		if(!(b == (int)b))
-			throw new NotAnInteger(left + " divided by " + right + " is not an integer");
-		return a;
+		if (!(left.evalToInt() != (int) (left.evalToInt())))
+			throw new NotAnInteger(left + " divided by " + right
+					+ " is not an integer");
+		return left.evalToInt() / right.evalToInt();
 	}
 
 	@Override
 	public double evalToFloat() {
-		return left.evalToFloat() / right.evalToFloat();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

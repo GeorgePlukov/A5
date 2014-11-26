@@ -1,3 +1,4 @@
+package cs2s03;
 class Times extends BinaryOp {
 	Times(Expr x, Expr y) {
 		left = x;
@@ -20,6 +21,7 @@ class Times extends BinaryOp {
 
 	@Override
 	public double evalToFloat() {
-		return left.evalToFloat() * right.evalToFloat();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
