@@ -1,3 +1,4 @@
+package cs2s03;
 class Times extends BinaryOp {
 	Times(Expr x, Expr y) {
 		left = x;

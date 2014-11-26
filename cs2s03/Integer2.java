@@ -1,3 +1,4 @@
+package cs2s03;
 class Integer2 extends Expr {
 	int i;
 

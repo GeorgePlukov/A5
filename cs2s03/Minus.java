@@ -1,3 +1,4 @@
+package cs2s03;
 class Minus extends Expr { // NOT BinaryOp!
 	Expr left;
 	Expr right;
