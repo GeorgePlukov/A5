@@ -16,15 +16,4 @@ abstract class Expr {
 		return (e.isGround()) ? e.toString() : "( " + e.toString() + " )";
 	}
 
-	public static void main(String[] args) throws NotAnInteger {
-		String s1 = "8+3";
-		Parser p = new Parser(s1);
-		try {
-			Expr e5 = p.parse();
-			print(e5);
-			System.out.println(e5.evalToInt());
-		} catch (ParseError e) {
-			System.out.println(e);
-		}
-	}
 }

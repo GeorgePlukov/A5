@@ -18,6 +18,7 @@ class Parser {
 
 	public Expr parse() throws ParseError {
 		boolean neg = false;
+
 		char n = s.charAt(pos);
 		if (n == '-') {
 			neg = true;
@@ -47,7 +48,7 @@ class Parser {
 				e = new Divide(e, next);
 				break;
 			default:
-				throw new ParseError("impossible"); // impossible!
+				throw new ParseError("throw non operation error"); // impossible!
 			}
 			if (pos == len)
 				return e;
@@ -58,6 +59,7 @@ class Parser {
 
 	private Expr term() throws ParseError {
 		char ch = s.charAt(pos);
+
 		if (Character.isDigit(ch)) {
 			int i = integer(ch);
 			return new Integer2(i);

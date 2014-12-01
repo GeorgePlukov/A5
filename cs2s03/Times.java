@@ -21,7 +21,6 @@ class Times extends BinaryOp {
 
 	@Override
 	public double evalToFloat() {
-		// TODO Auto-generated method stub
-		return 0;
+		return left.evalToFloat() * right.evalToFloat();
 	}
 }

@@ -1,4 +1,4 @@
-package cs2s03;
+ package cs2s03;
 /*
  * Filename: Calculator.java
  * Author: 2S03MakeYouLearnGood
@@ -141,15 +141,15 @@ class CalculatorFrame extends JFrame {
 		// have
 		// to be a 2-dimensional array, but it helps visualize things better.
 		String[][] buttonOrder = new String[][] {
-
-		{ "(", ")", "%", "AC" }, { "7", "8", "9", "/" },
+		{ "(", ")", "B", "AC" }, { "7", "8", "9", "/" },
 				{ "4", "5", "6", "*" }, { "1", "2", "3", "-" },
-				{ "0", ".", "=", "+" } };
+				{ "0", "M", "=", "+" } };
 
 		// Lets add our rows to the number panel!
 		for (int i = 0; i < NUMBER_PAD_HEIGHT; i++)
-			for (int j = 0; j < NUMBER_PAD_WIDTH; j++)
-				numberPanel.add(buttons.get(buttonOrder[i][j]));
+			for (int j = 0; j < NUMBER_PAD_WIDTH; j++){
+				System.out.println(buttonOrder[i][j]);
+				numberPanel.add(buttons.get(buttonOrder[i][j]));}
 
 		// Create and add a digit listener to each digit button. Check the
 		// implementation
@@ -264,120 +264,20 @@ class CalculatorFrame extends JFrame {
 				JButton j = (JButton) e.getSource();
 
 				String operator = j.getText();
-
-				/*
-				 * This is not a very good way for identifying which operator
-				 * was pressed (relying on the caption text of the button), but
-				 * it is good enough for demonstration purposes! We are
-				 * 'switching' on the first character of the operator button
-				 * caption, because that's enough to identify the operation.
-				 * 
-				 * If this were used under Java 7, we would be able to switch on
-				 * the String itself.
-				 */
-				switch (operator.charAt(0)) {
-
-				case 'A': // The clear operation.
-
-					resultField.setText("0");
-					action = null;
-					firstNumber = null;
-
-					break; // If you are missing 'break', the next case will
-							// execute too!
-
-				case '=':
-
-					if (action != null && firstNumber != null) {
-
-						// Parse the second number from the resultField text,
-						// perform the last-entered operation,
-						// and store the result back into the firstNumber field,
-						// over-writing the first number.
-						firstNumber = doOperation(firstNumber,
-								Integer.parseInt(resultField.getText()), action);
-
-						// Put the result into the resultField.
-						resultField.setText(firstNumber.toString());
-						action = null;
-					}
-
+				/*switch (operator.charAt(0)){
+				case 'A':
+					
 					break;
-
-				// This case 'falls through'. If +, -, %, / or * are entered,
-				// they all execute the same case!
-				case '+':
-				case '-':
-				case '%':
-				case '/':
-				case '*':
-
-					// If there was already a pending operation, perform it.
-					// This can make calculations
-					// easier for the user to do quickly.
-					if (action != null && firstNumber != null) {
-
-						firstNumber = doOperation(firstNumber,
-								Integer.parseInt(resultField.getText()), action);
-						resultField.setText(firstNumber.toString());
-						action = operator;
-					} else {
-
-						// Otherwise, parse and store the first number and
-						// operator.
-						firstNumber = Integer.parseInt(resultField.getText());
-						action = operator;
-
-						break;
-					}
-
+				
 				default:
-
-				}
+					
+				}*/
 			}
 		};
 	}
 
-	/**
-	 * Performs some operation on two arguments, based on a string
-	 * representation of that operation.
-	 * 
-	 * @param first
-	 *            The first argument to the operation.
-	 * @param second
-	 *            The second argument to the operation.
-	 * @param operation
-	 *            The operation to perform, represented as a string.
-	 * @return The result of the operation.
-	 */
-	private static int doOperation(int first, int second, String operation) {
-
-		/*
-		 * It would be better for 'operation' to be an enumerated type, but in
-		 * the interest of writing something simple that works, rather than
-		 * something that resembles a compiler, lets just do this.
-		 */
-		switch (operation.charAt(0)) {
-
-		case '+':
-			return first + second;
-
-		case '-':
-			return first - second;
-
-		case '*':
-			return first * second;
-
-		case '/':
-			return first / second;
-
-		case '%':
-			return first % second;
-
-			// It would make more sense to put an exception here. This can
-			// be an exercise for the reader!
-		default:
-			return -1;
-		}
+	public static void main(String [] args){
+		new CalculatorFrame();
 	}
+	
 }

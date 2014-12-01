@@ -18,7 +18,9 @@ class Divide extends Expr { // NOT BinaryOp!
 
 	@Override
 	public int evalToInt() throws NotAnInteger {
-		if (!(left.evalToInt() != (int) (left.evalToInt())))
+		int iEval = (int) left.evalToInt() / right.evalToInt();
+		double fEval = left.evalToFloat() / right.evalToFloat();
+		if (fEval != iEval)
 			throw new NotAnInteger(left + " divided by " + right
 					+ " is not an integer");
 		return left.evalToInt() / right.evalToInt();
@@ -27,6 +29,6 @@ class Divide extends Expr { // NOT BinaryOp!
 	@Override
 	public double evalToFloat() {
 		// TODO Auto-generated method stub
-		return 0;
+		return left.evalToFloat() / right.evalToFloat();
 	}
 }

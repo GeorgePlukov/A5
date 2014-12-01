@@ -22,6 +22,6 @@ class UnaryMinus extends Expr {
 	@Override
 	public double evalToFloat() {
 		// TODO Auto-generated method stub
-		return 0;
+		return -1 * e.evalToFloat();
 	}
 }
