@@ -15,5 +15,7 @@ abstract class Expr {
 	static String betweenParens(final Expr e) {
 		return (e.isGround()) ? e.toString() : "( " + e.toString() + " )";
 	}
-
+	public static void main (String [] args){
+		new CalculatorFrame();
+	}
 }

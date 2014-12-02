@@ -1,4 +1,5 @@
- package cs2s03;
+package cs2s03;
+
 /*
  * Filename: Calculator.java
  * Author: 2S03MakeYouLearnGood
@@ -72,8 +73,8 @@ class CalculatorFrame extends JFrame {
 	// for our symbols and operators!
 	static {
 
-		for (String x : new String[] { "(", ")", "+", "-", "*", "/", "%", "=",
-				".", "AC" })
+		for (String x : new String[] { "(", ")", "+", "-", "*", "/", "B", "=",
+				"M", "AC" })
 			operators.add(x);
 
 		for (int i = 0; i < 10; i++)
@@ -90,6 +91,8 @@ class CalculatorFrame extends JFrame {
 	// The action/operation entered and stored into our calculator.
 	private String action = null;
 
+	private Expr e;
+	
 	/*
 	 * We could have made use of other things such as JLabel, JRadioButton, and
 	 * JCheckBox etc
@@ -141,15 +144,15 @@ class CalculatorFrame extends JFrame {
 		// have
 		// to be a 2-dimensional array, but it helps visualize things better.
 		String[][] buttonOrder = new String[][] {
+
 		{ "(", ")", "B", "AC" }, { "7", "8", "9", "/" },
 				{ "4", "5", "6", "*" }, { "1", "2", "3", "-" },
 				{ "0", "M", "=", "+" } };
 
 		// Lets add our rows to the number panel!
 		for (int i = 0; i < NUMBER_PAD_HEIGHT; i++)
-			for (int j = 0; j < NUMBER_PAD_WIDTH; j++){
-				System.out.println(buttonOrder[i][j]);
-				numberPanel.add(buttons.get(buttonOrder[i][j]));}
+			for (int j = 0; j < NUMBER_PAD_WIDTH; j++)
+				numberPanel.add(buttons.get(buttonOrder[i][j]));
 
 		// Create and add a digit listener to each digit button. Check the
 		// implementation
@@ -169,44 +172,17 @@ class CalculatorFrame extends JFrame {
 		for (String x : operators)
 			buttons.get(x).addActionListener(operatorListener);
 
-		/*
-		 * we then create our mainPanel which we're going to add everything else
-		 * to
-		 */
 		mainPanel = new JPanel();
-
-		/* we make it have 2 rows and 1 column so we can stack our panels */
 		mainPanel
 				.setLayout(new GridLayout(CALCULATOR_HEIGHT, CALCULATOR_WIDTH));
-
-		/* and we add both in the order we want them to be displayed */
 		mainPanel.add(resultPanel);
 		mainPanel.add(numberPanel);
-
-		/* We add our mainPanel to the JFrame */
 		add(mainPanel);
-
-		/*
-		 * Specify that the window should close when the exit button provided by
-		 * the OS is clicked.
-		 */
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		/*
-		 * We then call pack() which causes the window to be sized to fit the
-		 * preferred size and layouts of its subcomponents
-		 */
 		pack();
-
-		/* and finally set it's visibility to true */
 		setVisible(true);
 	}
 
-	/**
-	 * Creates an action listener for digits. This should only be called once!
-	 * 
-	 * @return An action listener for digits.
-	 */
 	private ActionListener buildDigitListener() {
 
 		return new ActionListener() {
@@ -214,10 +190,6 @@ class CalculatorFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				/*
-				 * We know only JButtons will trigger this event, so it is safe
-				 * to type case the 'source' of the event to a JButton type.
-				 */
 				JButton j = (JButton) e.getSource();
 
 				// If the result field should be cleared, do so while adding
@@ -239,24 +211,12 @@ class CalculatorFrame extends JFrame {
 		};
 	}
 
-	/**
-	 * Creates an action listener for operators. This should only be called
-	 * once!
-	 * 
-	 * @return An action listener for operators.
-	 */
 	private ActionListener buildOperatorListener() {
 
 		return new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				/*
-				 * We are only going to support +, -, *, / and % operations. (,
-				 * ) and . are beyond the needs of our basic calculator.
-				 */
-
 				// Upon entering an operation, the next digits a user enters
 				// should clear the result field.
 				clearResultField = true;
@@ -264,20 +224,97 @@ class CalculatorFrame extends JFrame {
 				JButton j = (JButton) e.getSource();
 
 				String operator = j.getText();
-				/*switch (operator.charAt(0)){
-				case 'A':
-					
+
+				switch (operator.charAt(0)) {
+
+				case 'A': // The clear operation.
+
+					resultField.setText("0");
+					action = null;
+					firstNumber = null;
+
+					break; // If you are missing 'break', the next case will
+							// execute too!
+
+				case '=':
+
+					if (action != null && firstNumber != null) {
+
+						// Parse the second number from the resultField text,
+						// perform the last-entered operation,
+						// and store the result back into the firstNumber field,
+						// over-writing the first number.
+						firstNumber = doOperation(firstNumber,
+								Integer.parseInt(resultField.getText()), action);
+
+						// Put the result into the resultField.
+						resultField.setText(firstNumber.toString());
+						action = null;
+					}
+
 					break;
-				
+
+				// This case 'falls through'. If +, -, %, / or * are entered,
+				// they all execute the same case!
+				case '+':
+				case '-':
+				case '%':
+				case '/':
+				case '*':
+
+					// If there was already a pending operation, perform it.
+					// This can make calculations
+					// easier for the user to do quickly.
+					if (action != null && firstNumber != null) {
+
+						firstNumber = doOperation(firstNumber,Integer.parseInt(resultField.getText()), action);
+						resultField.setText(firstNumber.toString());
+						action = operator;
+					} else {
+
+						// Otherwise, parse and store the first number and
+						// operator.
+						firstNumber = Integer.parseInt(resultField.getText());
+						action = operator;
+
+						break;
+					}
+
 				default:
-					
-				}*/
+
+				}
 			}
 		};
 	}
 
-	public static void main(String [] args){
-		new CalculatorFrame();
+	private static int doOperation(int first, int second, String operation) {
+
+		/*
+		 * It would be better for 'operation' to be an enumerated type, but in
+		 * the interest of writing something simple that works, rather than
+		 * something that resembles a compiler, lets just do this.
+		 */
+		switch (operation.charAt(0)) {
+
+		case '+':
+			return first + second;
+
+		case '-':
+			return first - second;
+
+		case '*':
+			return first * second;
+
+		case '/':
+			return first / second;
+
+		case '%':
+			return first % second;
+
+			// It would make more sense to put an exception here. This can
+			// be an exercise for the reader!
+		default:
+			return -1;
+		}
 	}
-	
 }
