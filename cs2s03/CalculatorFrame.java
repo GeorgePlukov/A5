@@ -13,6 +13,7 @@ package cs2s03;
  * contains all of the classes for creating
  * user interfaces and for painting graphics and images.
  */
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 
 /*
  * We're going to be using the Swing package.
@@ -68,6 +70,10 @@ class CalculatorFrame extends JFrame {
 	private static Set<String> operators = new HashSet<String>();
 	private static Set<String> digits = new HashSet<String>();
 
+	private String expr = "";
+	private Expr ex;
+	private Mode m = Mode.INTEGER;
+
 	// Static blocks work like a constructor, but are outside out constructor
 	// and typically only used for variable initialization. Lets create a set
 	// for our symbols and operators!
@@ -91,8 +97,6 @@ class CalculatorFrame extends JFrame {
 	// The action/operation entered and stored into our calculator.
 	private String action = null;
 
-	private Expr e;
-	
 	/*
 	 * We could have made use of other things such as JLabel, JRadioButton, and
 	 * JCheckBox etc
@@ -195,18 +199,9 @@ class CalculatorFrame extends JFrame {
 				// If the result field should be cleared, do so while adding
 				// this digit. Lets also
 				// prevent leading zeroes.
-				if (clearResultField || resultField.getText().equals("0")) {
-
-					// We probably should not be relying on the text in the
-					// digit as our 'identifier'
-					// for that button, but it is sufficient for our purposes
-					// for now.
-					resultField.setText(j.getText());
-					clearResultField = false;
-				} else {
-
-					resultField.setText(resultField.getText() + j.getText());
-				}
+				clearResultField = false;
+				expr += j.getText();
+				resultField.setText(expr);
 			}
 		};
 	}
@@ -220,36 +215,55 @@ class CalculatorFrame extends JFrame {
 				// Upon entering an operation, the next digits a user enters
 				// should clear the result field.
 				clearResultField = true;
-
+				
 				JButton j = (JButton) e.getSource();
-
+				
 				String operator = j.getText();
-
-				switch (operator.charAt(0)) {
+				char ch = operator.charAt(0);
+				switch (ch) {
 
 				case 'A': // The clear operation.
-
-					resultField.setText("0");
-					action = null;
-					firstNumber = null;
-
+					expr = "";
+					resultField.setText(expr);
 					break; // If you are missing 'break', the next case will
 							// execute too!
-
+				case 'M':
+					if (m == Mode.INTEGER){
+						m = Mode.FLOAT;
+						j.setBackground(Color.RED);
+					}else{
+						m = Mode.INTEGER;
+						j.setBackground(Color.BLUE);
+					}
+					break;
+				case 'B': 
+					if (expr != "" && expr != null) 
+						expr = expr.substring(0, expr.length() - 1);
+					resultField.setText(expr);
+					break;
 				case '=':
 
-					if (action != null && firstNumber != null) {
-
-						// Parse the second number from the resultField text,
-						// perform the last-entered operation,
-						// and store the result back into the firstNumber field,
-						// over-writing the first number.
-						firstNumber = doOperation(firstNumber,
-								Integer.parseInt(resultField.getText()), action);
-
-						// Put the result into the resultField.
-						resultField.setText(firstNumber.toString());
-						action = null;
+					if (m == Mode.INTEGER) {
+						Parser p = new Parser(expr);
+						try {
+							ex = p.parse();
+							expr += "=";
+							expr += ex.evalToInt();
+							resultField.setText(expr);
+						} catch (ParseError | NotAnInteger e1) {
+							e1.printStackTrace();
+						}
+						
+					} else {
+						Parser p = new Parser(expr);
+						try {
+							ex = p.parse();
+							expr += "=";
+							expr += ex.evalToFloat();
+							resultField.setText(expr);
+						} catch (ParseError e1) {
+							e1.printStackTrace();
+						}
 					}
 
 					break;
@@ -257,64 +271,24 @@ class CalculatorFrame extends JFrame {
 				// This case 'falls through'. If +, -, %, / or * are entered,
 				// they all execute the same case!
 				case '+':
+					expr += "+";
+					break;
 				case '-':
-				case '%':
+					expr += "-";
+					break;
 				case '/':
+					expr += "/";
+					break;
 				case '*':
-
-					// If there was already a pending operation, perform it.
-					// This can make calculations
-					// easier for the user to do quickly.
-					if (action != null && firstNumber != null) {
-
-						firstNumber = doOperation(firstNumber,Integer.parseInt(resultField.getText()), action);
-						resultField.setText(firstNumber.toString());
-						action = operator;
-					} else {
-
-						// Otherwise, parse and store the first number and
-						// operator.
-						firstNumber = Integer.parseInt(resultField.getText());
-						action = operator;
-
-						break;
-					}
-
-				default:
+					expr += "*";
+					break;
 
 				}
+
+				resultField.setText(expr);
+				
 			}
 		};
 	}
 
-	private static int doOperation(int first, int second, String operation) {
-
-		/*
-		 * It would be better for 'operation' to be an enumerated type, but in
-		 * the interest of writing something simple that works, rather than
-		 * something that resembles a compiler, lets just do this.
-		 */
-		switch (operation.charAt(0)) {
-
-		case '+':
-			return first + second;
-
-		case '-':
-			return first - second;
-
-		case '*':
-			return first * second;
-
-		case '/':
-			return first / second;
-
-		case '%':
-			return first % second;
-
-			// It would make more sense to put an exception here. This can
-			// be an exercise for the reader!
-		default:
-			return -1;
-		}
-	}
 }

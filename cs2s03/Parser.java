@@ -1,8 +1,10 @@
 package cs2s03;
 class ParseError extends Exception {
-	ParseError(String message) {
-		super(message);
-	}
+
+	private static final long serialVersionUID = 1L;
+
+	ParseError(String message) {  
+		super(message); }
 }
 
 class Parser {
@@ -10,48 +12,30 @@ class Parser {
 	private int len = 0;
 	private String s;
 
-	Parser(String inp) {
-		this.s = inp;
-		this.pos = 0;
-		this.len = inp.length();
-	}
+	Parser(String inp) { 
+		this.s = inp; this.pos = 0; this.len = inp.length(); }
 
 	public Expr parse() throws ParseError {
 		boolean neg = false;
-
+		if (s.length() == 0) throw new ParseError ("No expression"); //Added by Eva
 		char n = s.charAt(pos);
-		if (n == '-') {
-			neg = true;
-			pos++;
-		}
+		if (n == '-') { neg = true; pos++; }
 		Expr e = term(); // this will change pos
-		if (neg) {
-			e = new UnaryMinus(e);
-		}
-		if (pos == len)
-			return e;
+		if (neg) { e = new UnaryMinus(e); }
+		if (pos == len) return e;
 		n = s.charAt(pos);
-		while (isOper(n)) {
+		while ( isOper(n) ) {
 			pos++;
+			if (pos == len) throw new ParseError("incomplete expression"); // added by Ben
 			Expr next = term();
 			switch (n) { // does not implement operator precedence!
-			case '+':
-				e = new Plus(e, next);
-				break;
-			case '*':
-				e = new Times(e, next);
-				break;
-			case '-':
-				e = new Minus(e, next);
-				break;
-			case '/':
-				e = new Divide(e, next);
-				break;
-			default:
-				throw new ParseError("throw non operation error"); // impossible!
+			case '+': e = new Plus(e, next); break;
+			case '*': e = new Times(e, next); break;
+			case '-': e = new Minus(e, next); break;
+			case '/': e = new Divide(e, next); break;
+			default: throw new ParseError("impossible"); // impossible!
 			}
-			if (pos == len)
-				return e;
+			if (pos == len) return e;
 			n = s.charAt(pos);
 		}
 		return e;
@@ -59,18 +43,17 @@ class Parser {
 
 	private Expr term() throws ParseError {
 		char ch = s.charAt(pos);
-
 		if (Character.isDigit(ch)) {
 			int i = integer(ch);
 			return new Integer2(i);
 		} else if (ch == '(') {
 			pos++;
+			if (pos == len) throw new ParseError("incomplete parentheses"); // added by Ben
 			Expr e = parse();
+			if (pos == len) throw new ParseError("incomplete parentheses"); // added by Ben
 			char peek = s.charAt(pos);
 			if (peek != ')') {
-				throw new ParseError("expected ) got "
-						+ Character.toString(peek));
-			}
+				throw new ParseError("expected ) got " + Character.toString(peek)); }
 			pos++;
 			return e;
 		} else {
@@ -81,7 +64,7 @@ class Parser {
 	private int integer(char c) {
 		int acc = 0;
 		char peek = c;
-		do {
+		do { 
 			acc = (acc * 10) + Character.getNumericValue(peek);
 			pos++;
 			if (pos < len) {
@@ -89,11 +72,9 @@ class Parser {
 			} else {
 				peek = '\n';
 			}
-		} while (Character.isDigit(peek));
+		} while (Character.isDigit(peek)) ;
 		return acc;
 	}
-
 	private boolean isOper(char c) {
-		return (c == '+' || c == '*' || c == '-' || c == '/');
-	}
+		return (c == '+' || c == '*' || c == '-' || c == '/'); }
 }
